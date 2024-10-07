@@ -57,6 +57,8 @@ from geometry_msgs.msg import PoseArray
 from aruco_interfaces.msg import ArucoMarkers
 from rcl_interfaces.msg import ParameterDescriptor, ParameterType
 
+from icecream import ic
+
 
 class ArucoNode(rclpy.node.Node):
     def __init__(self):
@@ -104,9 +106,11 @@ class ArucoNode(rclpy.node.Node):
             # rely only on the rgb image topic for the pose estimation
 
             # create a subscription to the image topic
+            ic("only rgb image works")
             self.image_sub = self.create_subscription(
                 Image, self.image_topic, self.image_callback, qos_profile_sensor_data
             )
+            
 
         # Set up publishers
         self.poses_pub = self.create_publisher(PoseArray, self.markers_visualization_topic, 10)
@@ -144,6 +148,7 @@ class ArucoNode(rclpy.node.Node):
         self.destroy_subscription(self.info_sub)
 
     def image_callback(self, img_msg: Image):
+        
         if self.info_msg is None:
             self.get_logger().warn("No camera info has been received!")
             return
@@ -157,9 +162,11 @@ class ArucoNode(rclpy.node.Node):
 
         # Set the frame id and timestamp for the markers and pose array
         if self.camera_frame == "":
+            ic("cameara_frame:", self.camera_frame)
             markers.header.frame_id = self.info_msg.header.frame_id
             pose_array.header.frame_id = self.info_msg.header.frame_id
         else:
+            ic("cameara_frame 1:", self.camera_frame)
             markers.header.frame_id = self.camera_frame
             pose_array.header.frame_id = self.camera_frame
 
