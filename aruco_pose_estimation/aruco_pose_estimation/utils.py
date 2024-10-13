@@ -28,7 +28,7 @@ ARUCO_DICT = {
 }
 
 
-def aruco_display(corners, ids, image):
+def aruco_display(corners, ids, image, tvec):
     '''
     This function draws the axes on the image for each of the detected markers,
     given the rotation and translation vectors of the input camera image frame.
@@ -67,6 +67,10 @@ def aruco_display(corners, ids, image):
 
         logger = rcutils_logger.RcutilsLogger(name="aruco_node")
         logger.debug("[Inference] ArUco markers IDs: {}".format(ids))
+        position_text = f"{tvec[0], tvec[1], tvec[2]}"
+        position = (10, image.shape[0] - 20)  
+        cv2.putText(image, position_text, position, cv2.FONT_HERSHEY_SIMPLEX,
+                0.7, (255, 255, 255), 2)
 
     return image
 

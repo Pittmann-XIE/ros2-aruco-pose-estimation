@@ -89,6 +89,7 @@ class ArucoNode(rclpy.node.Node):
         # select the type of input to use for the pose estimation
         if (bool(self.use_depth_input)):
             # use both rgb and depth image topics for the pose estimation
+            ic("depth image works")
 
             # create a message filter to synchronize the image and depth image topics
             self.image_sub = message_filters.Subscriber(self, Image, self.image_topic,
